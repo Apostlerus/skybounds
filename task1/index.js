@@ -15,15 +15,7 @@ const VALIDATION_ERRORS = {
 
 const getPercentagesFromShares = (shares) => {
     validateInput(shares);
-    const sharesNums = shares.map(share => {
-        if (!isNumberString(share)) {
-            throw new Error (VALIDATION_ERRORS.FLOAT_STRING);
-        }
-        if (isNegative(share)) {
-            throw new Error (VALIDATION_ERRORS.NOT_NEGATIVE);
-        }
-        return parseFloat(share);
-    });
+    const sharesNums = shares.map(parseFloat);
 
     const totalShares = sharesNums.reduce((acc, current) => acc + current, 0);
 
@@ -49,11 +41,20 @@ function validateInput(shares) {
     if (shares.length === 0) {
         throw new Error (VALIDATION_ERRORS.NOT_EMPTY_ARRAY);
     }
+    shares.forEach(share => {
+        if (!isNumberString(share)) {
+            throw new Error (VALIDATION_ERRORS.FLOAT_STRING);
+        }
+        if (isNegative(share)) {
+            throw new Error (VALIDATION_ERRORS.NOT_NEGATIVE);
+        }
+    });
 }
 
 // test
 try {
-    const inputShares = ['1.5', '3', '6', '1.5'];
+    // const inputShares = ['1.5', '3', '6', '1.5'];
+    const inputShares = ['1', '1', '1'];
     const outputPercentages = getPercentagesFromShares(inputShares);
     console.log(outputPercentages);
 } catch (e) {
